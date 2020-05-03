@@ -6,9 +6,6 @@ import { Provider } from "react-redux";
 import { combineReducers, createStore } from "redux";
 import { travelReducer } from "./store/reducers/travel";
 import LoadingScreen from "./screens/loadingScreen";
-import MapView from "react-native-maps";
-import MapScreen from "./screens/Maps/MapScreen";
-import LocationPicker from "./screens/Maps/LocationPicker";
 
 const rootReducer = combineReducers({
   travel: travelReducer,
@@ -25,14 +22,6 @@ export default function App() {
   if (loading) {
     return <LoadingScreen />;
   }
-
-  return (
-    <View style={styles.container}>
-      {/* <MapView style={{ width: "100%", height: "100%" }} /> */}
-      {/* <MapScreen /> */}
-      <LocationPicker />
-    </View>
-  );
 
   return (
     <Provider store={store}>

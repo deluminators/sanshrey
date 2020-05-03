@@ -12,7 +12,6 @@ import { createStackNavigator } from "@react-navigation/stack";
 import CustomDrawer from "../components/customDrawer";
 import MedicalScreen from "../screens/Medicals/MedicalScreen";
 import NewPage from "../screens/Medicals/newPage";
-import LocationPicker from "../screens/Maps/LocationPicker";
 
 const Tab = createMaterialBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -172,17 +171,6 @@ const NewStack = () => (
   </Stack.Navigator>
 );
 
-const MapStack = () => {
-  <Stack.Navigator
-    screenOptions={{
-      headerTintColor: "white",
-      headerStyle: { backgroundColor: "blue" },
-    }}
-  >
-    <Stack.Screen name="Location" component={LocationPicker} />
-  </Stack.Navigator>;
-};
-
 const TabNavigator = (props) => {
   return (
     <Drawer.Navigator
@@ -199,7 +187,6 @@ const TabNavigator = (props) => {
 
       <Drawer.Screen name="Needs and Vendors" component={NeedsVendors} />
       <Drawer.Screen name="Medicals" component={MedicalStack} />
-      <Drawer.Screen name="Your Location" component={MapStack} />
       <Drawer.Screen name="Volunteer" component={VolunteerStack} />
     </Drawer.Navigator>
   );
