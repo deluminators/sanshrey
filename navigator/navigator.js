@@ -1,7 +1,6 @@
 import React from "react";
 import { createMaterialBottomTabNavigator } from "@react-navigation/material-bottom-tabs";
 import HomeScreen from "../screens/HomeScreen";
-import JoinScreen from "../screens/JoinScreen";
 import DonationScreen from "../screens/DonationScreen";
 import { Ionicons } from "@expo/vector-icons";
 import { HelpStackNavigator } from "./stackNavigators";
@@ -10,9 +9,10 @@ import VendorsScreen from "../screens/NeedsVendors/VendorsScreen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import CustomDrawer from "../components/customDrawer";
-import MedicalScreen from "../screens/Medicals/MedicalScreen";
 import NewPage from "../screens/Medicals/newPage";
 import LocationPicker from "../screens/Maps/LocationPicker";
+import MedicalNavigator from "./medicalNavigator";
+import VolunteerNavigator from "./volunteerNavigator";
 
 const Tab = createMaterialBottomTabNavigator();
 const Drawer = createDrawerNavigator();
@@ -29,44 +29,6 @@ const HomeStack = () => (
     <Stack.Screen name="Home" component={HomeScreen} />
   </Stack.Navigator>
 );
-
-const VolunteerStack = () => {
-  return (
-    <Stack.Navigator
-      initialRouteName="Volunteer"
-      screenOptions={{
-        headerTintColor: "white",
-        headerStyle: { backgroundColor: "blue" },
-      }}
-    >
-      <Stack.Screen name="Volunteer" component={JoinScreen} />
-      <Stack.Screen
-        name="New"
-        component={NewPage}
-        options={({ route }) => ({ title: route.params.title })}
-      />
-    </Stack.Navigator>
-  );
-};
-
-const MedicalStack = () => {
-  return (
-    <Stack.Navigator
-      initialRouteName="Volunteer"
-      screenOptions={{
-        headerTintColor: "white",
-        headerStyle: { backgroundColor: "green" },
-      }}
-    >
-      <Stack.Screen name="Medicals" component={MedicalScreen} />
-      <Stack.Screen
-        name="Stack"
-        component={NewPage}
-        options={({ route }) => ({ title: route.params.title })}
-      />
-    </Stack.Navigator>
-  );
-};
 
 const Home = () => (
   <Tab.Navigator initialRouteName="Home" shifting={true}>
@@ -103,7 +65,7 @@ const Home = () => (
     />
     <Tab.Screen
       name="Volunteer"
-      component={VolunteerStack}
+      component={VolunteerNavigator}
       options={{
         tabBarIcon: ({ color }) => {
           return <Ionicons name="ios-people" size={26} color={color} />;
@@ -173,14 +135,16 @@ const NewStack = () => (
 );
 
 const MapStack = () => {
-  <Stack.Navigator
-    screenOptions={{
-      headerTintColor: "white",
-      headerStyle: { backgroundColor: "blue" },
-    }}
-  >
-    <Stack.Screen name="Location" component={LocationPicker} />
-  </Stack.Navigator>;
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerTintColor: "white",
+        headerStyle: { backgroundColor: "blue" },
+      }}
+    >
+      <Stack.Screen name="Location" component={LocationPicker} />
+    </Stack.Navigator>
+  );
 };
 
 const TabNavigator = (props) => {
@@ -198,9 +162,9 @@ const TabNavigator = (props) => {
       <Drawer.Screen name="Home" component={Home} />
 
       <Drawer.Screen name="Needs and Vendors" component={NeedsVendors} />
-      <Drawer.Screen name="Medicals" component={MedicalStack} />
+      <Drawer.Screen name="Medicals" component={MedicalNavigator} />
       <Drawer.Screen name="Your Location" component={MapStack} />
-      <Drawer.Screen name="Volunteer" component={VolunteerStack} />
+      <Drawer.Screen name="Volunteer" component={VolunteerNavigator} />
     </Drawer.Navigator>
   );
 };

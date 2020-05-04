@@ -26,7 +26,7 @@ const MedicalScreen = (props) => {
         <CustomButton
           style={{ width: 150, alignItems: "center" }}
           onPress={() =>
-            props.navigation.navigate("Stack", { title: "doctors" })
+            props.navigation.navigate("Doctors", { title: "doctors" })
           }
         >
           Find Doctors
@@ -34,7 +34,7 @@ const MedicalScreen = (props) => {
         <CustomButton
           style={{ width: 150, alignItems: "center" }}
           onPress={() =>
-            props.navigation.navigate("Stack", { title: "medicines" })
+            props.navigation.navigate("Medicines", { title: "medicines" })
           }
         >
           Request Medicine
@@ -43,13 +43,16 @@ const MedicalScreen = (props) => {
       <CustomButton
         style={{ width: 300, alignItems: "center", marginTop: 30 }}
         onPress={() =>
-          props.navigation.navigate("Stack", { title: "diagnostic" })
+          props.navigation.navigate("Diagnostics", { title: "diagnostic" })
         }
       >
         Requst Diagnostic
       </CustomButton>
       <CustomButton
         style={{ width: 300, alignItems: "center", marginVertical: 20 }}
+        onPress={() =>
+          props.navigation.navigate("Tickets", { title: "diagnostic" })
+        }
       >
         Check Ticket
       </CustomButton>
@@ -64,6 +67,7 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: "center",
     justifyContent: "center",
+    backgroundColor: "black",
   },
   row: {
     width: "80%",

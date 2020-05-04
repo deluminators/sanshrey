@@ -62,6 +62,16 @@ const HomeScreen = (props) => {
           />
         );
       },
+      headerRight: () => {
+        return (
+          <HeaderButton
+            name="ios-notifications"
+            color="white"
+            size={25}
+            onPress={() => {}}
+          />
+        );
+      },
     });
   });
 

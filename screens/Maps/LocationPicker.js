@@ -7,6 +7,7 @@ import {
   Alert,
   Button,
   Dimensions,
+  SafeAreaView,
 } from "react-native";
 import * as Location from "expo-location";
 import MapView from "react-native-maps";
@@ -48,7 +49,7 @@ const LocationPicker = (props) => {
   const [fetching, setFetching] = useState(false);
 
   return (
-    <View style={styles.screen}>
+    <SafeAreaView style={styles.screen}>
       {/* <View style={styles.mapStyle}>
         {location ? (
           <Text>{JSON.stringify(location)}</Text>
@@ -71,7 +72,7 @@ const LocationPicker = (props) => {
       )}
       {/* <MapView style={styles.mapStyle} /> */}
       <Button title="get location" onPress={fetchLocation} />
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -85,6 +86,6 @@ const styles = StyleSheet.create({
   },
   mapStyle: {
     width: Dimensions.get("window").width,
-    height: Dimensions.get("window").height - 50,
+    height: Dimensions.get("window").height - 100,
   },
 });

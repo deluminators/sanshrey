@@ -1,7 +1,7 @@
 import React, { useLayoutEffect, useState } from "react";
 import { View, Text, StyleSheet, Switch } from "react-native";
-import CustomButton from "../components/CustomButton";
-import HeaderButton from "../components/HeaderButton";
+import CustomButton from "../../components/CustomButton";
+import HeaderButton from "../../components/HeaderButton";
 
 const Filter = (props) => {
   return (
@@ -51,7 +51,9 @@ const JoinScreen = (props) => {
         <CustomButton
           style={{ marginBottom: 20, width: 300, alignItems: "center" }}
           onPress={() =>
-            props.navigation.navigate("New", { title: "Register as Volunteer" })
+            props.navigation.navigate("Registration", {
+              title: "Register as Volunteer",
+            })
           }
         >
           Register as Volunteer
@@ -60,14 +62,18 @@ const JoinScreen = (props) => {
       <CustomButton
         style={{ marginBottom: 20, width: 300, alignItems: "center" }}
         onPress={() =>
-          props.navigation.navigate("New", { title: "Find Volunteer" })
+          props.navigation.navigate("Find Volunteer", {
+            title: "Find Volunteer",
+          })
         }
       >
         Find Volunteer
       </CustomButton>
       <CustomButton
         style={{ marginBottom: 20, width: 300, alignItems: "center" }}
-        onPress={() => props.navigation.navigate("New", { title: "List All" })}
+        onPress={() =>
+          props.navigation.navigate("List Volunteer", { title: "List All" })
+        }
       >
         List All
       </CustomButton>
