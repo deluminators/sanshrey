@@ -97,7 +97,7 @@ End with an example of getting some data out of the system or using it for a lit
 
 ## Versioning
 
-For the versions available, see the [https://github.com/illuminatishack/sanshrey.git]. 
+For the versions available, see the [https://github.com/deluminators/sanshrey.git]. 
 
 
 ## License
