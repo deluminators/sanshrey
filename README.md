@@ -1,6 +1,8 @@
 # Sanshrey
 Link to the presentation: https://docs.google.com/presentation/d/1nslarcENMLPXPxcXQPT93wVoX1BgW9E1gQygUsVH1xE/edit?usp=sharing
 
+Presentation also hosted in github here: https://github.com/deluminators/sanshrey/blob/master/sanshrey(6).pdf
+
 An all-in-one app for catering the needs of people in these pandemic times.
 Offering some useful and ground breaking features and services, ranging from Covid activity tracker to requesting of Health diagnostician, it has it all.
 
