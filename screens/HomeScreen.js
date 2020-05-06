@@ -1,4 +1,9 @@
-import React, { useLayoutEffect } from "react";
+import React, { useLayoutEffect, useEffect, useState } from "react";
+import * as TaskManager from "expo-task-manager";
+import { addLocation } from "../store/actions/locations";
+import * as Location from "expo-location";
+import axios from "axios";
+import Geocoder from "react-native-geocoding";
 import {
   View,
   Text,
@@ -6,10 +11,27 @@ import {
   ScrollView,
   Image,
   Button,
+  Switch,
+  ActivityIndicator,
 } from "react-native";
 import HeaderButton from "../components/HeaderButton";
 import CardComponent from "../components/CardComponent";
 import NewCard from "../components/NewCard";
+import { useDispatch } from "react-redux";
+const Filter = (props) => {
+  return (
+    <View style={styles.filter}>
+      <Text style={styles.text}>{props.name}</Text>
+      <Switch
+        value={props.state}
+        value={props.state}
+        onValueChange={props.toggleSwitch}
+        trackColor={{ true: "#4542f5" }}
+        thumbColor={props.state ? "#4542f5" : ""}
+      />
+    </View>
+  );
+};
 
 const Cards = (props) => {
   return (
@@ -48,6 +70,67 @@ const Cards = (props) => {
 };
 
 const HomeScreen = (props) => {
+  const [show, setShow] = useState(false);
+
+  const [data, setData] = useState(null);
+  const dispatch = useDispatch();
+  const defineTask = () =>
+    TaskManager.defineTask("background-task-location", ({ data, err }) => {
+      if (err) {
+        console.log(err);
+        return;
+      }
+      const { locations } = data;
+      // console.log("////////////////////////");
+      // console.log(locations[0], "location");
+      const myLat = locations[0].coords.latitude;
+      const myLon = locations[0].coords.longitude;
+      console.log(myLat, myLon);
+      const myApiKey = "xKY10BBNp7cUAsRjzs70x205CQUqW0bu";
+      fetch(
+        `https://www.mapquestapi.com/geocoding/v1/reverse?key=${myApiKey}&location=${myLat}%2C${myLon}&thumbMaps=false`
+      )
+        .then((response, err) => {
+          if (err) console.log(err);
+          else return response.json();
+        })
+        .then((responseJson) => {
+          dispatch(
+            addLocation(responseJson.results[0].locations[0].adminArea5)
+          );
+          // console.log(responseJson.results[0].locations[0]);
+        });
+    });
+
+  const fetchDetails = async () => {
+    try {
+      let data = await axios.get(
+        "https://api.covid19india.org/districts_daily.json"
+      );
+      // console.log(data);
+      // data = data.data.raw_data.filter((el) => {
+      //   return (
+      //     el.detectedcity === "bhubaneswar" && el.dateannounced === "05/05/2020"
+      //   );
+      // });
+      let arr = data.data["districtsDaily"]["Odisha"]["Khordha"];
+      console.log(arr[arr.length - 1], "data");
+      setData(arr[arr.length - 1]);
+    } catch (er) {
+      console.log(er);
+    }
+  };
+
+  useEffect(() => {
+    Location.startLocationUpdatesAsync("background-task-location", {
+      accuracy: Location.Accuracy.High,
+      timeInterval: 10000,
+      distanceInterval: 1,
+    });
+    defineTask();
+    fetchDetails();
+  }, []);
+
   useLayoutEffect(() => {
     props.navigation.setOptions({
       headerLeft: () => {
@@ -77,33 +160,92 @@ const HomeScreen = (props) => {
 
   return (
     <ScrollView contentContainerStyle={styles.screen}>
-      <View style={{ width: "100%", padding: 5 }}>
-        <Text
-          style={{
-            color: "white",
-            fontWeight: "bold",
-            fontSize: 18,
-            marginVertical: 5,
-            marginHorizontal: 12,
-          }}
-        >
-          Corona Status
-        </Text>
-        <View style={styles.info}>
-          <Cards title="Total Cases" number="222" />
-          <Cards title="Active Cases" number="222" />
+      {!show ? (
+        <View style={{ width: "100%", padding: 5 }}>
+          <Text
+            style={{
+              color: "white",
+              fontWeight: "bold",
+              fontSize: 18,
+              marginVertical: 5,
+              marginHorizontal: 12,
+            }}
+          >
+            Corona Status
+          </Text>
+          <View style={styles.info}>
+            <Cards title="Total Cases" number="46,621" />
+            <Cards title="Active Cases" number="32,096" />
+          </View>
+          <View style={styles.info}>
+            <Cards title="Cured/Discharged" number="12,948" />
+            <Cards title="Deaths" number="1,573" />
+          </View>
+          <Button title="know more" color="red" />
         </View>
-        <View style={styles.info}>
-          <Cards title="Cured/Discharged" number="222" />
-          <Cards title="Deaths" number="222" />
+      ) : (
+        <View style={{ width: "100%", padding: 5 }}>
+          <Text
+            style={{
+              color: "white",
+              fontWeight: "bold",
+              fontSize: 18,
+              marginVertical: 5,
+              marginHorizontal: 12,
+            }}
+          >
+            Corona Status At Khordha on {data.date}
+          </Text>
+          <View style={styles.info}>
+            <Cards title="Total Cases" number={data.confirmed} />
+            <Cards title="Active Cases" number={data.active} />
+          </View>
+          <View style={styles.info}>
+            <Cards title="Cured/Discharged" number={data.recovered} />
+            <Cards title="Deaths" number={data.deceased} />
+          </View>
+          <Button title="know more" color="red" />
         </View>
-        <Button title="know more" color="red" />
-      </View>
+      )}
+      <Filter
+        toggleSwitch={() => {
+          setShow((prevState) => !prevState);
+        }}
+        name="show district data"
+        state={show}
+      />
       <NewCard
         imageUrl="https://cdn.mainichi.jp/vol1/2020/03/05/20200305p2a00m0na014000p/8.jpg?1"
         title="Learn More"
         desc="Washing hands in regular interval can prevent Corona.."
       />
+      {/* {data ? (
+        <View style={{ width: "100%", padding: 5 }}>
+          <Text
+            style={{
+              color: "white",
+              fontWeight: "bold",
+              fontSize: 18,
+              marginVertical: 5,
+              marginHorizontal: 12,
+            }}
+          >
+            Corona Status At Khordha on {data.date}
+          </Text>
+          <View style={styles.info}>
+            <Cards title="Total Cases" number={data.confirmed} />
+            <Cards title="Active Cases" number={data.active} />
+          </View>
+          <View style={styles.info}>
+            <Cards title="Cured/Discharged" number={data.recovered} />
+            <Cards title="Deaths" number={data.deceased} />
+          </View>
+          <Button title="know more" color="red" />
+        </View>
+      ) : (
+        <ActivityIndicator size={30} color="white" />
+      )} */}
+
       <CardComponent
         navigation={props.navigation}
         title="Donate"
@@ -140,6 +282,16 @@ const styles = StyleSheet.create({
     width: "100%",
     flexDirection: "row",
     justifyContent: "space-between",
+  },
+  filter: {
+    flexDirection: "row",
+    width: "80%",
+    justifyContent: "space-between",
+    marginVertical: 15,
+  },
+  text: {
+    fontSize: 18,
+    color: "white",
   },
 });
 

@@ -40,7 +40,7 @@ const JoinScreen = (props) => {
 
   return (
     <View style={styles.screen}>
-      <Filter
+      {/* <Filter
         toggleSwitch={() => {
           setIsRegistered((prevState) => !prevState);
         }}
@@ -58,7 +58,7 @@ const JoinScreen = (props) => {
         >
           Register as Volunteer
         </CustomButton>
-      ) : null}
+      ) : null} */}
       <CustomButton
         style={{ marginBottom: 20, width: 300, alignItems: "center" }}
         onPress={() =>
