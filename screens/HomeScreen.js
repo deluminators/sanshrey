@@ -80,12 +80,11 @@ const HomeScreen = (props) => {
         console.log(err);
         return;
       }
+      console.log("hello");
       const { locations } = data;
-      // console.log("////////////////////////");
-      // console.log(locations[0], "location");
       const myLat = locations[0].coords.latitude;
       const myLon = locations[0].coords.longitude;
-      console.log(myLat, myLon);
+      // console.log(myLat, myLon);
       const myApiKey = "xKY10BBNp7cUAsRjzs70x205CQUqW0bu";
       fetch(
         `https://www.mapquestapi.com/geocoding/v1/reverse?key=${myApiKey}&location=${myLat}%2C${myLon}&thumbMaps=false`
@@ -95,6 +94,7 @@ const HomeScreen = (props) => {
           else return response.json();
         })
         .then((responseJson) => {
+          // console.log(responseJson);
           dispatch(
             addLocation(responseJson.results[0].locations[0].adminArea5)
           );
@@ -107,6 +107,10 @@ const HomeScreen = (props) => {
       let data = await axios.get(
         "https://api.covid19india.org/districts_daily.json"
       );
+      // let data2 = await axios.get(
+      //   "https://api.covid19india.org/raw_data3.json"
+      // );
+      // console.log(data2.data["raw_data"].length);
       // console.log(data);
       // data = data.data.raw_data.filter((el) => {
       //   return (
@@ -114,7 +118,7 @@ const HomeScreen = (props) => {
       //   );
       // });
       let arr = data.data["districtsDaily"]["Odisha"]["Khordha"];
-      console.log(arr[arr.length - 1], "data");
+      // console.log(arr[arr.length - 1], "data");
       setData(arr[arr.length - 1]);
     } catch (er) {
       console.log(er);
@@ -122,12 +126,13 @@ const HomeScreen = (props) => {
   };
 
   useEffect(() => {
+    defineTask();
     Location.startLocationUpdatesAsync("background-task-location", {
       accuracy: Location.Accuracy.High,
       timeInterval: 10000,
       distanceInterval: 1,
     });
-    defineTask();
+
     fetchDetails();
   }, []);
 
@@ -157,6 +162,35 @@ const HomeScreen = (props) => {
       },
     });
   });
+  let el;
+  if (!data) {
+    el = <ActivityIndicator size={30} color="white" />;
+  } else {
+    el = (
+      <View style={{ width: "100%", padding: 5 }}>
+        <Text
+          style={{
+            color: "white",
+            fontWeight: "bold",
+            fontSize: 18,
+            marginVertical: 5,
+            marginHorizontal: 12,
+          }}
+        >
+          Corona Status At Khordha on {data.date}
+        </Text>
+        <View style={styles.info}>
+          <Cards title="Total Cases" number={data.confirmed} />
+          <Cards title="Active Cases" number={data.active} />
+        </View>
+        <View style={styles.info}>
+          <Cards title="Cured/Discharged" number={data.recovered} />
+          <Cards title="Deaths" number={data.deceased} />
+        </View>
+        <Button title="know more" color="red" />
+      </View>
+    );
+  }
 
   return (
     <ScrollView contentContainerStyle={styles.screen}>
@@ -184,32 +218,13 @@ const HomeScreen = (props) => {
           <Button title="know more" color="red" />
         </View>
       ) : (
-        <View style={{ width: "100%", padding: 5 }}>
-          <Text
-            style={{
-              color: "white",
-              fontWeight: "bold",
-              fontSize: 18,
-              marginVertical: 5,
-              marginHorizontal: 12,
-            }}
-          >
-            Corona Status At Khordha on {data.date}
-          </Text>
-          <View style={styles.info}>
-            <Cards title="Total Cases" number={data.confirmed} />
-            <Cards title="Active Cases" number={data.active} />
-          </View>
-          <View style={styles.info}>
-            <Cards title="Cured/Discharged" number={data.recovered} />
-            <Cards title="Deaths" number={data.deceased} />
-          </View>
-          <Button title="know more" color="red" />
-        </View>
+        el
       )}
       <Filter
         toggleSwitch={() => {
-          setShow((prevState) => !prevState);
+          if (data) {
+            setShow((prevState) => !prevState);
+          }
         }}
         name="show district data"
         state={show}

@@ -9,7 +9,6 @@ import VendorsScreen from "../screens/NeedsVendors/VendorsScreen";
 import { createDrawerNavigator } from "@react-navigation/drawer";
 import { createStackNavigator } from "@react-navigation/stack";
 import CustomDrawer from "../components/customDrawer";
-import NewPage from "../screens/Medicals/newPage";
 import LocationPicker from "../screens/Maps/LocationPicker";
 import MedicalNavigator from "./medicalNavigator";
 import VolunteerNavigator from "./volunteerNavigator";
@@ -121,17 +120,6 @@ const NeedsVendors = () => (
       }}
     />
   </Tab.Navigator>
-);
-
-const NewStack = () => (
-  <Stack.Navigator
-    screenOptions={{
-      headerTintColor: "white",
-      headerStyle: { backgroundColor: "blue" },
-    }}
-  >
-    <Stack.Screen name="Are you available as a volunteer" component={NewPage} />
-  </Stack.Navigator>
 );
 
 const MapStack = () => {

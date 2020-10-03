@@ -15,13 +15,13 @@ import MedicalCard from "../../components/medicalCard";
 const Doctors = (props) => {
   const [show, setShow] = useState(false);
   const [name, setName] = useState("Some Name");
-  const [pin, setPin] = useState("760012");
+  const [pin, setPin] = useState("769012");
   const [stores, setStores] = useState(null);
 
   const fetchApi = async () => {
     try {
       let data = await fetch(
-        `http://192.168.43.206:3000/api/v1/medicals/doctors/${pin}`
+        `https://obscure-tundra-86090.herokuapp.com/api/v1/medicals/doctors/${pin}`
       );
       data = await data.json();
       console.log(data.data);

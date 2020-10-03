@@ -1,18 +1,13 @@
 import React, { useState, useEffect } from "react";
-import { StyleSheet, Text, View } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import TabNavigator from "./navigator/navigator";
-import { Provider, useDispatch } from "react-redux";
+import { Provider } from "react-redux";
 import { combineReducers, createStore } from "redux";
 import { travelReducer } from "./store/reducers/travel";
 import { locationReducer } from "./store/reducers/locations";
-import { addLocation } from "./store/actions/locations";
 import LoadingScreen from "./screens/loadingScreen";
-import MapView from "react-native-maps";
-import MapScreen from "./screens/Maps/MapScreen";
-import LocationPicker from "./screens/Maps/LocationPicker";
+import { Alert } from "react-native";
 import * as Location from "expo-location";
-import * as TaskManager from "expo-task-manager";
 
 const rootReducer = combineReducers({
   travel: travelReducer,
@@ -22,7 +17,26 @@ const rootReducer = combineReducers({
 const store = createStore(rootReducer);
 
 export default function App() {
-  // const dispatch = useDispatch();
+  const fetchLocation = async () => {
+    try {
+      let { status } = await Location.requestPermissionsAsync();
+      console.log(status);
+      if (status !== "granted") {
+        return Alert.alert("permission denied.", "enable permissions");
+      }
+      const stat = await Location.hasServicesEnabledAsync();
+      if (!stat) {
+        Alert.alert("location", "enable location");
+      }
+    } catch (er) {
+      console.log(er);
+      Alert.alert("error fetching location", "enable location");
+    }
+  };
+
+  useEffect(() => {
+    fetchLocation();
+  }, []);
 
   const [loading, setLoading] = useState(true);
   setTimeout(() => {
@@ -33,14 +47,6 @@ export default function App() {
     return <LoadingScreen />;
   }
 
-  // return (
-  //   <View style={styles.container}>
-  //     {/* <MapView style={{ width: "100%", height: "100%" }} /> */}
-  //     {/* <MapScreen /> */}
-  //     <LocationPicker />
-  //   </View>
-  // );
-
   return (
     <Provider store={store}>
       <NavigationContainer>
@@ -49,25 +55,3 @@ export default function App() {
     </Provider>
   );
 }
-
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: "#fff",
-    alignItems: "center",
-    justifyContent: "center",
-  },
-});
-
-// TaskManager.defineTask("background-task-location", ({ data, error }) => {
-//   if (error) {
-//     console.log(error);
-//     // Error occurred - check `error.message` for more details.
-//     return;
-//   }
-//   if (data) {
-//     const { locations } = data;
-//     console.log(data);
-//     // do something with the locations captured in the background
-//   }
-// });
