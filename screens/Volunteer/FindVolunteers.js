@@ -23,7 +23,7 @@ const FindVolunteers = (props) => {
   const fetchApi = async () => {
     try {
       let data = await fetch(
-        `http://192.168.43.206:3000/api/v1/volunteers/${pin}`
+        `https://obscure-tundra-86090.herokuapp.com/api/v1/volunteers/${pin}`
       );
       data = await data.json();
       console.log(data.data);

@@ -164,20 +164,20 @@ export default LocationPicker;
 //       },
 //     });
 //   });
-//   // const fetchLocation = async () => {
-//   //   try {
-//   //     let { status } = await Location.requestPermissionsAsync();
-//   //     if (status !== "granted") {
-//   //       return Alert.alert("permission denied.", "enable permissions");
-//   //     }
+// const fetchLocation = async () => {
+//   try {
+//     let { status } = await Location.requestPermissionsAsync();
+//     if (status !== "granted") {
+//       return Alert.alert("permission denied.", "enable permissions");
+//     }
 
-//   //     let location = await Location.getCurrentPositionAsync({});
-//   //     console.log(location);
-//   //     setLocation(location);
-//   //   } catch (er) {
-//   //     Alert.alert("error fetching location", "choose location manually");
-//   //   }
-//   // };
+//     let location = await Location.getCurrentPositionAsync({});
+//     console.log(location);
+//     setLocation(location);
+//   } catch (er) {
+//     Alert.alert("error fetching location", "choose location manually");
+//   }
+// };
 //   // let text;
 //   // const [location, setLocation] = useState(null);
 //   // const [fetching, setFetching] = useState(false);
